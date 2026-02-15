@@ -158,10 +158,11 @@
             </h2>
             <div class="max-w-5xl mx-auto">
                 <div class="relative rounded-lg overflow-hidden shadow-2xl">
-                    <video id="main-video" class="w-full aspect-video" controls preload="metadata" playsinline poster="images/resident-evil-requiem.jpg">
+                    <video id="main-video" class="w-full aspect-video" controls preload="metadata" playsinline controlsList="nodownload noremoteplayback" disablePictureInPicture oncontextmenu="return false;" tabindex="0" poster="images/resident-evil-requiem.jpg">
                         <source src="vidios-web/Resident%20Evil%20Requiem%20-%203rd%20Trailer.mp4" type="video/mp4">
                         Tu navegador no soporta el elemento de video.
                     </video>
+                    <div id="main-video-seek-indicator" class="video-seek-indicator" aria-hidden="true"></div>
                     <div class="absolute top-4 left-4 bg-red-600 text-white px-3 py-1 rounded-full text-sm font-bold">
                         NUEVO
                     </div>

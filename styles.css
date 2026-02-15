@@ -344,28 +344,62 @@ body {
     scroll-behavior: smooth;
 }
 
-/* Custom Video Controls */
+/* Trailer video without hover zoom (YouTube-like behavior) */
 #main-video {
-    transition: all 0.3s ease;
+    transition: filter 0.5s ease;
 }
 
-#main-video:hover {
-    transform: scale(1.02);
-    box-shadow: 0 10px 30px rgba(220, 38, 38, 0.3);
+#main-video:focus {
+    outline: 2px solid rgba(220, 38, 38, 0.7);
+    outline-offset: 2px;
 }
 
-#main-video::-webkit-media-controls-panel {
-    display: none;
+/* Desktop behavior: controls only visible on hover/focus */
+@media (hover: hover) and (pointer: fine) {
+    #main-video::-webkit-media-controls-panel {
+        opacity: 0;
+        transition: opacity 0.18s ease;
+    }
+
+    #main-video:hover::-webkit-media-controls-panel,
+    #main-video:focus::-webkit-media-controls-panel {
+        opacity: 1;
+    }
 }
 
-#main-video:hover::-webkit-media-controls-panel {
-    display: flex;
+.video-seek-indicator {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.55);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 9999px;
+    padding: 0.45rem 0.85rem;
+    font-weight: 700;
+    font-size: 1.35rem;
+    letter-spacing: 0.2px;
     opacity: 0;
-    transition: opacity 0.3s ease;
+    pointer-events: none;
+    transition: opacity 0.16s ease;
+    z-index: 20;
 }
 
-#main-video:hover::-webkit-media-controls-panel:hover {
+.video-seek-indicator.show {
     opacity: 1;
+}
+
+.video-seek-indicator.forward {
+    left: auto;
+    right: 12%;
+    transform: translateY(-50%);
+}
+
+.video-seek-indicator.backward {
+    left: 12%;
+    right: auto;
+    transform: translateY(-50%);
 }
 
 /* Custom video overlay for controls */
@@ -388,11 +422,6 @@ body {
     opacity: 0;
     transition: all 0.3s ease;
     z-index: 10;
-}
-
-/* Video poster fade effect */
-#main-video {
-    transition: filter 0.5s ease;
 }
 
 #main-video.ended {

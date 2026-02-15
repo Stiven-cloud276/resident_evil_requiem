@@ -141,8 +141,78 @@ document.addEventListener('DOMContentLoaded', function() {
     // Video trailer restart functionality
     const mainVideo = document.getElementById('main-video');
     const trailerBtn = document.getElementById('play-trailer-btn');
+    const mainVideoSeekIndicator = document.getElementById('main-video-seek-indicator');
     
     if (mainVideo) {
+        // Reduce download exposure where browser supports it
+        mainVideo.setAttribute('controlsList', 'nodownload noremoteplayback');
+        mainVideo.setAttribute('disablePictureInPicture', '');
+        let seekIndicatorTimer = null;
+        let lastSeekDirection = null;
+        let lastSeekAt = 0;
+        let seekAccumulated = 0;
+
+        function showSeekIndicator(seconds) {
+            if (!mainVideoSeekIndicator) return;
+
+            const now = Date.now();
+            const direction = seconds > 0 ? 'forward' : 'backward';
+            const absSeconds = Math.abs(seconds);
+            const isBurst = lastSeekDirection === direction && (now - lastSeekAt) < 800;
+            seekAccumulated = isBurst ? (seekAccumulated + absSeconds) : absSeconds;
+            lastSeekDirection = direction;
+            lastSeekAt = now;
+
+            mainVideoSeekIndicator.classList.remove('forward', 'backward');
+            mainVideoSeekIndicator.classList.add(direction);
+            const shown = Number.isInteger(seekAccumulated) ? seekAccumulated : Number(seekAccumulated.toFixed(1));
+            mainVideoSeekIndicator.textContent = direction === 'forward'
+                ? `+ ${shown} >>`
+                : `<< ${shown}`;
+            mainVideoSeekIndicator.classList.add('show');
+
+            if (seekIndicatorTimer) {
+                clearTimeout(seekIndicatorTimer);
+            }
+
+            seekIndicatorTimer = setTimeout(() => {
+                mainVideoSeekIndicator.classList.remove('show');
+            }, 380);
+        }
+
+        function seekMainVideo(seconds) {
+            const duration = Number.isFinite(mainVideo.duration) ? mainVideo.duration : 0;
+            const current = mainVideo.currentTime || 0;
+            const next = Math.max(0, Math.min(duration || Number.MAX_SAFE_INTEGER, current + seconds));
+            const applied = next - current;
+
+            // At timeline bounds, ignore extra seek to avoid infinite indicator
+            if (Math.abs(applied) < 0.01) {
+                return;
+            }
+
+            mainVideo.currentTime = next;
+            showSeekIndicator(applied);
+        }
+
+        function canUseTrailerShortcuts(eventTarget) {
+            const tag = eventTarget && eventTarget.tagName ? eventTarget.tagName.toLowerCase() : '';
+            const isEditable = eventTarget && (eventTarget.isContentEditable || ['input', 'textarea', 'select'].includes(tag));
+            if (isEditable) return false;
+            return true;
+        }
+
+        function isVideoMostlyVisible() {
+            const rect = mainVideo.getBoundingClientRect();
+            const vh = window.innerHeight || document.documentElement.clientHeight;
+            const vw = window.innerWidth || document.documentElement.clientWidth;
+            const visibleX = Math.max(0, Math.min(rect.right, vw) - Math.max(rect.left, 0));
+            const visibleY = Math.max(0, Math.min(rect.bottom, vh) - Math.max(rect.top, 0));
+            const visibleArea = visibleX * visibleY;
+            const area = Math.max(1, rect.width * rect.height);
+            return (visibleArea / area) > 0.35;
+        }
+
         // Reiniciar video cuando termine
         mainVideo.addEventListener('ended', function() {
             // Reiniciar el video al principio
@@ -166,6 +236,98 @@ document.addEventListener('DOMContentLoaded', function() {
         mainVideo.addEventListener('mouseleave', function() {
             this.style.cursor = 'default';
         });
+
+        // Ensure keyboard shortcuts target the trailer after user interaction
+        mainVideo.addEventListener('pointerdown', function() {
+            mainVideo.focus({ preventScroll: true });
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (!canUseTrailerShortcuts(e.target)) {
+                return;
+            }
+
+            const focused = document.activeElement === mainVideo;
+            const hovered = typeof mainVideo.matches === 'function' && mainVideo.matches(':hover');
+            const shouldControlTrailer = focused || hovered || isVideoMostlyVisible();
+
+            if (!shouldControlTrailer) return;
+
+            if (e.code === 'Space') {
+                // When the video has focus, let the browser native media toggle handle it.
+                // This prevents double toggle (pause+play) from native + custom handlers.
+                if (focused) {
+                    return;
+                }
+                e.preventDefault();
+                if (mainVideo.paused) {
+                    mainVideo.play().catch(() => {});
+                } else {
+                    mainVideo.pause();
+                }
+                return;
+            }
+
+            if (e.code === 'ArrowRight') {
+                e.preventDefault();
+                seekMainVideo(5);
+                return;
+            }
+
+            if (e.code === 'ArrowLeft') {
+                e.preventDefault();
+                seekMainVideo(-5);
+            }
+        });
+
+        // Mobile behavior:
+        // - single tap anywhere toggles play/pause
+        // - double tap left/right seeks -/+10 seconds
+        let tapTimer = null;
+        let lastTapTime = 0;
+        let lastTapSide = null;
+
+        mainVideo.addEventListener('touchend', function(e) {
+            if (!e.changedTouches || e.changedTouches.length === 0) {
+                return;
+            }
+
+            const touch = e.changedTouches[0];
+            const rect = mainVideo.getBoundingClientRect();
+            const x = touch.clientX - rect.left;
+            const currentSide = x < rect.width / 2 ? 'left' : 'right';
+            const now = Date.now();
+            const isDoubleTap = (now - lastTapTime) < 300 && lastTapSide === currentSide;
+
+            if (isDoubleTap) {
+                if (tapTimer) {
+                    clearTimeout(tapTimer);
+                    tapTimer = null;
+                }
+
+                const delta = currentSide === 'right' ? 10 : -10;
+                seekMainVideo(delta);
+                lastTapTime = 0;
+                lastTapSide = null;
+                return;
+            }
+
+            lastTapTime = now;
+            lastTapSide = currentSide;
+
+            if (tapTimer) {
+                clearTimeout(tapTimer);
+            }
+
+            tapTimer = setTimeout(() => {
+                if (mainVideo.paused) {
+                    mainVideo.play().catch(() => {});
+                } else {
+                    mainVideo.pause();
+                }
+                tapTimer = null;
+            }, 260);
+        }, { passive: true });
         
         // Funcionalidad del botón de trailer
         if (trailerBtn) {
