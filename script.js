@@ -142,6 +142,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const mainVideo = document.getElementById('main-video');
     const trailerBtn = document.getElementById('play-trailer-btn');
     const mainVideoSeekIndicator = document.getElementById('main-video-seek-indicator');
+    const mainVideoMobileToggle = document.getElementById('main-video-mobile-toggle');
     
     if (mainVideo) {
         // Reduce download exposure where browser supports it
@@ -168,7 +169,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const shown = Number.isInteger(seekAccumulated) ? seekAccumulated : Number(seekAccumulated.toFixed(1));
             mainVideoSeekIndicator.textContent = direction === 'forward'
                 ? `+ ${shown} >>`
-                : `<< ${shown}`;
+                : `<< ${shown} -`;
             mainVideoSeekIndicator.classList.add('show');
 
             if (seekIndicatorTimer) {
@@ -181,18 +182,29 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         function seekMainVideo(seconds) {
+            const EDGE_EPSILON = 0.05;
             const duration = Number.isFinite(mainVideo.duration) ? mainVideo.duration : 0;
             const current = mainVideo.currentTime || 0;
+
+            // Hard-stop at boundaries to avoid exceeding timeline limits
+            if (seconds < 0 && current <= EDGE_EPSILON) {
+                return false;
+            }
+            if (seconds > 0 && duration > 0 && current >= (duration - EDGE_EPSILON)) {
+                return false;
+            }
+
             const next = Math.max(0, Math.min(duration || Number.MAX_SAFE_INTEGER, current + seconds));
             const applied = next - current;
 
             // At timeline bounds, ignore extra seek to avoid infinite indicator
             if (Math.abs(applied) < 0.01) {
-                return;
+                return false;
             }
 
             mainVideo.currentTime = next;
             showSeekIndicator(applied);
+            return true;
         }
 
         function canUseTrailerShortcuts(eventTarget) {
@@ -236,6 +248,36 @@ document.addEventListener('DOMContentLoaded', function() {
         mainVideo.addEventListener('mouseleave', function() {
             this.style.cursor = 'default';
         });
+
+        const isCoarsePointer = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+        if (isCoarsePointer) {
+            // Mobile: only center icon should control play/pause.
+            mainVideo.controls = false;
+        }
+
+        function updateMobileToggleIcon() {
+            if (!mainVideoMobileToggle) return;
+            const icon = mainVideoMobileToggle.querySelector('i');
+            if (!icon) return;
+            icon.className = mainVideo.paused ? 'fas fa-play' : 'fas fa-pause';
+        }
+
+        updateMobileToggleIcon();
+        mainVideo.addEventListener('play', updateMobileToggleIcon);
+        mainVideo.addEventListener('pause', updateMobileToggleIcon);
+
+        if (mainVideoMobileToggle) {
+            mainVideoMobileToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                if (mainVideo.paused) {
+                    mainVideo.play().catch(() => {});
+                } else {
+                    mainVideo.pause();
+                }
+                updateMobileToggleIcon();
+            });
+        }
 
         // Ensure keyboard shortcuts target the trailer after user interaction
         mainVideo.addEventListener('pointerdown', function() {
@@ -281,13 +323,16 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         // Mobile behavior:
-        // - single tap anywhere toggles play/pause
         // - double tap left/right seeks -/+10 seconds
-        let tapTimer = null;
+        // - play/pause is handled only by center icon button
         let lastTapTime = 0;
         let lastTapSide = null;
 
         mainVideo.addEventListener('touchend', function(e) {
+            if (!isCoarsePointer) {
+                return;
+            }
+
             if (!e.changedTouches || e.changedTouches.length === 0) {
                 return;
             }
@@ -300,11 +345,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const isDoubleTap = (now - lastTapTime) < 300 && lastTapSide === currentSide;
 
             if (isDoubleTap) {
-                if (tapTimer) {
-                    clearTimeout(tapTimer);
-                    tapTimer = null;
-                }
-
                 const delta = currentSide === 'right' ? 10 : -10;
                 seekMainVideo(delta);
                 lastTapTime = 0;
@@ -314,19 +354,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
             lastTapTime = now;
             lastTapSide = currentSide;
-
-            if (tapTimer) {
-                clearTimeout(tapTimer);
-            }
-
-            tapTimer = setTimeout(() => {
-                if (mainVideo.paused) {
-                    mainVideo.play().catch(() => {});
-                } else {
-                    mainVideo.pause();
-                }
-                tapTimer = null;
-            }, 260);
         }, { passive: true });
         
         // Funcionalidad del botón de trailer
