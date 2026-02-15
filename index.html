@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:,">
+    <title>Resident Evil Requiem - El Regreso de Leon</title>
+    <script>
+        document.documentElement.classList.add('js');
+    </script>
+    
+    <!-- Preload crítico para FOUC -->
+    <link rel="preload" href="./styles.css" as="style">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@300;400;700;900&display=swap" as="style">
+    
+    <!-- CSS crítico inline para evitar FOUC -->
+    <style>
+        /* Critical CSS para evitar flash */
+        body { 
+            background: #000; 
+            color: #fff; 
+            opacity: 1;
+            transition: opacity 0.3s ease-in; 
+        }
+        .js body {
+            opacity: 0;
+        }
+        .js body.loaded { 
+            opacity: 1; 
+        }
+        /* Prevenir parpadeo de navegación */
+        nav { 
+            background: rgba(0,0,0,0.9); 
+            backdrop-filter: blur(12px); 
+        }
+    </style>
+    
+    <!-- Carga síncrona de estilos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./styles.css">
+    <script src="./script.js" defer></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        (function fallbackTailwind() {
+            if (window.tailwind) return;
+            const alt = document.createElement('script');
+            alt.src = 'https://unpkg.com/@tailwindcss/browser@4';
+            alt.setAttribute('data-fallback-tailwind', 'true');
+            document.head.appendChild(alt);
+        })();
+    </script>
+
+    <!-- Script robusto para mostrar contenido -->
+    <script>
+        (function() {
+            const revealBody = function() {
+                if (document.body) {
+                    document.body.classList.add('loaded');
+                }
+            };
+
+            document.addEventListener('DOMContentLoaded', function() {
+                requestAnimationFrame(revealBody);
+            });
+
+            window.addEventListener('load', function() {
+                revealBody();
+            }, { once: true });
+
+            setTimeout(function() {
+                revealBody();
+            }, 1500);
+
+            window.addEventListener('error', function() {
+                revealBody();
+            });
+            window.addEventListener('unhandledrejection', function() {
+                revealBody();
+            });
+        })();
+    </script>
+    <script>
+        window.addEventListener('load', function() {
+            if (typeof initApp === 'function') {
+                initApp();
+            }
+        });
+    </script>
+</head>
+<body class="bg-black text-white overflow-x-hidden">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 bg-black/90 backdrop-blur-md border-b border-red-900/30">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <div class="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center">
+                        <span class="text-white font-bold text-xl">RE</span>
+                    </div>
+                    <span class="text-2xl font-bold text-red-600" style="font-family: 'Bebas Neue', cursive;">RESIDENT EVIL REQUIEM</span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#inicio" class="hover:text-red-500 transition-colors">Inicio</a>
+                    <a href="#detalles" class="hover:text-red-500 transition-colors">Detalles</a>
+                    <a href="#trailer" class="hover:text-red-500 transition-colors">Trailer</a>
+                    <a href="#sagas" class="hover:text-red-500 transition-colors">Sagas</a>
+                    <a href="#galeria" class="hover:text-red-500 transition-colors">Galería</a>
+                </div>
+                <button id="mobile-menu-btn" class="md:hidden text-white">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-black/95 backdrop-blur-md">
+            <div class="px-4 py-3 space-y-3">
+                <a href="#inicio" class="block hover:text-red-500 transition-colors">Inicio</a>
+                <a href="#detalles" class="block hover:text-red-500 transition-colors">Detalles</a>
+                <a href="#trailer" class="block hover:text-red-500 transition-colors">Trailer</a>
+                <a href="#sagas" class="block hover:text-red-500 transition-colors">Sagas</a>
+                <a href="#galeria" class="block hover:text-red-500 transition-colors">Galería</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="inicio" class="min-h-screen relative flex items-center justify-center">
+        <div class="absolute inset-0 bg-gradient-to-b from-black/50 via-black/70 to-black"></div>
+        <div class="absolute inset-0">
+            <img src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=1920&h=1080&fit=crop" alt="Resident Evil 9 Background" class="w-full h-full object-cover opacity-40">
+        </div>
+        <div class="relative z-10 text-center px-4 max-w-5xl mx-auto">
+            <h1 class="text-6xl md:text-8xl font-bold mb-6 text-red-600" style="font-family: 'Bebas Neue', cursive; text-shadow: 0 0 30px rgba(220, 38, 38, 0.8);">
+                RESIDENT EVIL REQUIEM
+            </h1>
+            <p class="text-xl md:text-3xl mb-8 text-gray-300">Grace Ashcroft y Leon S. Kennedy: Una Nueva Era de Terror</p>
+            <div class="flex flex-col md:flex-row gap-4 justify-center">
+                <button id="play-trailer-btn" class="bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-lg font-bold text-lg transition-all transform hover:scale-105 shadow-lg">
+                    <i class="fas fa-play mr-2"></i> Ver Tráiler
+                </button>
+                <a href="informacion.html" class="inline-block border-2 border-red-600 hover:bg-red-600 text-white px-8 py-4 rounded-lg font-bold text-lg transition-all">
+                    <i class="fas fa-info-circle mr-2"></i> Más Información
+                </a>
+            </div>
+        </div>
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <i class="fas fa-chevron-down text-3xl text-red-600"></i>
+        </div>
+    </section>
+
+    <!-- Main Video Section -->
+    <section id="trailer" class="py-20 bg-gradient-to-b from-black to-gray-900">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl md:text-6xl font-bold text-center mb-12 text-red-600" style="font-family: 'Bebas Neue', cursive;">
+                Grace Ashcroft y Leon S. Kennedy están de Vuelta
+            </h2>
+            <div class="max-w-5xl mx-auto">
+                <div class="relative rounded-lg overflow-hidden shadow-2xl">
+                    <video id="main-video" class="w-full aspect-video" controls poster="https://i.ytimg.com/vi/Kr3yeIPXH-I/maxresdefault.jpg">
+                        <source src="vidios/Resident%20Evil%20Requiem%20-%203rd%20Trailer.mp4" type="video/mp4">
+                        Tu navegador no soporta el elemento de video.
+                    </video>
+                    <div class="absolute top-4 left-4 bg-red-600 text-white px-3 py-1 rounded-full text-sm font-bold">
+                        NUEVO
+                    </div>
+                </div>
+                <p class="text-center mt-6 text-gray-400 text-lg">
+                    Los dos protagonistas principales se unen para enfrentar la amenaza biológica más grande en Resident Evil Requiem
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Game Details Section -->
+    <section id="detalles" class="py-20 bg-black">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl md:text-6xl font-bold text-center mb-16 text-red-600" style="font-family: 'Bebas Neue', cursive;">
+                Detalles de Resident Evil Requiem
+            </h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <div class="bg-gray-900 rounded-lg p-6 border border-red-900/30 hover:border-red-600/50 transition-all transform hover:scale-105">
+                    <div class="text-red-600 text-4xl mb-4">
+                        <i class="fas fa-gamepad"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3">Doble Protagonista</h3>
+                    <p class="text-gray-400">Juega como Grace Ashcroft (analista del FBI) y Leon S. Kennedy (agente DSO) con estilos de juego diferentes.</p>
+                </div>
+                <div class="bg-gray-900 rounded-lg p-6 border border-red-900/30 hover:border-red-600/50 transition-all transform hover:scale-105">
+                    <div class="text-red-600 text-4xl mb-4">
+                        <i class="fas fa-skull-crossbones"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3">Perspectivas Múltiples</h3>
+                    <p class="text-gray-400">Cambia entre primera y tercera persona en cualquier momento. Grace usa primera persona, Leon usa tercera persona.</p>
+                </div>
+                <div class="bg-gray-900 rounded-lg p-6 border border-red-900/30 hover:border-red-600/50 transition-all transform hover:scale-105">
+                    <div class="text-red-600 text-4xl mb-4">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3">30° Aniversario</h3>
+                    <p class="text-gray-400">Celebra el 30° aniversario de la franquicia con el juego más ambicioso hasta la fecha.</p>
+                </div>
+                <div class="bg-gray-900 rounded-lg p-6 border border-red-900/30 hover:border-red-600/50 transition-all transform hover:scale-105">
+                    <div class="text-red-600 text-4xl mb-4">
+                        <i class="fas fa-vr-cardboard"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3">RE Engine Evolucionado</h3>
+                    <p class="text-gray-400">Gráficos con realismo cinematográfico y path traced lighting para una inmersión sin precedentes.</p>
+                </div>
+                <div class="bg-gray-900 rounded-lg p-6 border border-red-900/30 hover:border-red-600/50 transition-all transform hover:scale-105">
+                    <div class="text-red-600 text-4xl mb-4">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3">Raccoon City Devastada</h3>
+                    <p class="text-gray-400">Explora los restos de Raccoon City 30 años después de su destrucción en el hotel Wrenwood.</p>
+                </div>
+                <div class="bg-gray-900 rounded-lg p-6 border border-red-900/30 hover:border-red-600/50 transition-all transform hover:scale-105">
+                    <div class="text-red-600 text-4xl mb-4">
+                        <i class="fas fa-microscope"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3">Victor Gideon</h3>
+                    <p class="text-gray-400">Detén al antiguo científico de Umbrella y sus experimentos bioterroristas en el Midwest.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Leon's Saga Videos Section -->
+    <section id="sagas" class="py-20 bg-gradient-to-b from-black to-gray-900">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl md:text-6xl font-bold text-center mb-16 text-red-600" style="font-family: 'Bebas Neue', cursive;">
+                Las Misiones de los Protagonistas
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+                <div class="video-card bg-gray-900 rounded-lg overflow-hidden border border-red-900/30 hover:border-red-600/50 transition-all transform hover:scale-105">
+                    <div class="relative">
+                        <video class="w-full aspect-video object-cover" muted loop autoplay>
+                            <source src="vidios/Grace Ashcroft.mp4" type="video/mp4">
+                        </video>
+                        <div class="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded text-xs font-bold">
+                            REQUIEM
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-xl font-bold mb-2">Grace Ashcroft</h3>
+                        <p class="text-gray-400 text-sm">Analista del FBI investigando muertes extrañas en el hotel Wrenwood de Raccoon City.</p>
+                    </div>
+                </div>
+                <div class="video-card bg-gray-900 rounded-lg overflow-hidden border border-red-900/30 hover:border-red-600/50 transition-all transform hover:scale-105">
+                    <div class="relative">
+                        <video class="w-full aspect-video object-cover" muted loop autoplay>
+                            <source src="vidios/Leon requiem.mp4" type="video/mp4">
+                        </video>
+                        <div class="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded text-xs font-bold">
+                            REQUIEM
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-xl font-bold mb-2">Leon S. Kennedy</h3>
+                        <p class="text-gray-400 text-sm">Agente DSO investigando incidentes relacionados con el científico Victor Gideon.</p>
+                    </div>
+                </div>
+                <div class="video-card bg-gray-900 rounded-lg overflow-hidden border border-red-900/30 hover:border-red-600/50 transition-all transform hover:scale-105">
+                    <div class="relative">
+                        <video class="w-full aspect-video object-cover" muted loop autoplay>
+                            <source src="vidios/Leon re2.mp4" type="video/mp4">
+                        </video>
+                        <div class="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded text-xs font-bold">
+                            RE2
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-xl font-bold mb-2">Resident Evil 2</h3>
+                        <p class="text-gray-400 text-sm">La primera misión de Leon como policía en Raccoon City.</p>
+                    </div>
+                </div>
+                <div class="video-card bg-gray-900 rounded-lg overflow-hidden border border-red-900/30 hover:border-red-600/50 transition-all transform hover:scale-105">
+                    <div class="relative">
+                        <video class="w-full aspect-video object-cover" muted loop autoplay>
+                            <source src="vidios/Leon re4.mp4" type="video/mp4">
+                        </video>
+                        <div class="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded text-xs font-bold">
+                            RE4
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-xl font-bold mb-2">Resident Evil 4</h3>
+                        <p class="text-gray-400 text-sm">Rescatando a Ashley Graham en Europa.</p>
+                    </div>
+                </div>
+                <div class="video-card bg-gray-900 rounded-lg overflow-hidden border border-red-900/30 hover:border-red-600/50 transition-all transform hover:scale-105">
+                    <div class="relative">
+                        <video class="w-full aspect-video object-cover" muted loop autoplay>
+                            <source src="vidios/Leon re6.mp4" type="video/mp4">
+                        </video>
+                        <div class="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded text-xs font-bold">
+                            RE6
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-xl font-bold mb-2">Resident Evil 6</h3>
+                        <p class="text-gray-400 text-sm">Enfrentando la amenaza bioterrorista global.</p>
+                    </div>
+                </div>
+                <div class="video-card bg-gray-900 rounded-lg overflow-hidden border border-red-900/30 hover:border-red-600/50 transition-all transform hover:scale-105">
+                    <div class="relative">
+                        <video class="w-full aspect-video object-cover" muted loop autoplay>
+                            <source src="vidios/damnation.mp4" type="video/mp4">
+                        </video>
+                        <div class="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded text-xs font-bold">
+                            RE:DG
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-xl font-bold mb-2">Damnation</h3>
+                        <p class="text-gray-400 text-sm">Misión secreta en Europa del Este.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="galeria" class="py-20 bg-black">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl md:text-6xl font-bold text-center mb-16 text-red-600" style="font-family: 'Bebas Neue', cursive;">
+                Galería de Resident Evil Requiem
+            </h2>
+            <div class="marquee-gallery max-w-6xl mx-auto overflow-hidden rounded-lg">
+                <div class="marquee-row flex space-x-4 mb-4">
+                    <div class="flex space-x-4 animate-marquee-left">
+                        <div class="gallery-item relative overflow-hidden rounded-lg flex-shrink-0 w-64 h-48">
+                            <img src="https://gaming-age.com/wp-content/uploads/2025/12/Resident_Evil_Requiem_3.jpg" alt="RE9 Screenshot 1" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-red-600/20 opacity-0 hover:opacity-100 transition-opacity"></div>
+                        </div>
+                        <div class="gallery-item relative overflow-hidden rounded-lg flex-shrink-0 w-64 h-48">
+                            <img src="https://gaming-age.com/wp-content/uploads/2025/12/Resident_Evil_Requiem_2.jpg" alt="RE9 Screenshot 2" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-red-600/20 opacity-0 hover:opacity-100 transition-opacity"></div>
+                        </div>
+                        <div class="gallery-item relative overflow-hidden rounded-lg flex-shrink-0 w-64 h-48">
+                            <img src="https://gaming-age.com/wp-content/uploads/2025/12/Resident_Evil_Requiem_1.jpg" alt="RE9 Screenshot 3" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-red-600/20 opacity-0 hover:opacity-100 transition-opacity"></div>
+                        </div>
+                        <div class="gallery-item relative overflow-hidden rounded-lg flex-shrink-0 w-64 h-48">
+                            <img src="https://gaming-age.com/wp-content/uploads/2025/12/Resident_Evil_Requiem_-_Leon_Artwork.jpg" alt="RE9 Screenshot 4" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-red-600/20 opacity-0 hover:opacity-100 transition-opacity"></div>
+                        </div>
+                    </div>
+                    <!-- Duplicated for seamless loop -->
+                    <div class="flex space-x-4 animate-marquee-left">
+                        <div class="gallery-item relative overflow-hidden rounded-lg flex-shrink-0 w-64 h-48">
+                            <img src="https://gaming-age.com/wp-content/uploads/2025/12/Resident_Evil_Requiem_3.jpg" alt="RE9 Screenshot 1" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-red-600/20 opacity-0 hover:opacity-100 transition-opacity"></div>
+                        </div>
+                        <div class="gallery-item relative overflow-hidden rounded-lg flex-shrink-0 w-64 h-48">
+                            <img src="https://gaming-age.com/wp-content/uploads/2025/12/Resident_Evil_Requiem_2.jpg" alt="RE9 Screenshot 2" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-red-600/20 opacity-0 hover:opacity-100 transition-opacity"></div>
+                        </div>
+                        <div class="gallery-item relative overflow-hidden rounded-lg flex-shrink-0 w-64 h-48">
+                            <img src="https://gaming-age.com/wp-content/uploads/2025/12/Resident_Evil_Requiem_1.jpg" alt="RE9 Screenshot 3" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-red-600/20 opacity-0 hover:opacity-100 transition-opacity"></div>
+                        </div>
+                        <div class="gallery-item relative overflow-hidden rounded-lg flex-shrink-0 w-64 h-48">
+                            <img src="https://gaming-age.com/wp-content/uploads/2025/12/Resident_Evil_Requiem_-_Leon_Artwork.jpg" alt="RE9 Screenshot 4" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-red-600/20 opacity-0 hover:opacity-100 transition-opacity"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="marquee-row flex space-x-4">
+                    <div class="flex space-x-4 animate-marquee-right">
+                        <div class="gallery-item relative overflow-hidden rounded-lg flex-shrink-0 w-64 h-48">
+                            <img src="https://gaming-age.com/wp-content/uploads/2025/12/Resident_Evil_Requiem_16.jpg" alt="RE9 Screenshot 5" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-red-600/20 opacity-0 hover:opacity-100 transition-opacity"></div>
+                        </div>
+                        <div class="gallery-item relative overflow-hidden rounded-lg flex-shrink-0 w-64 h-48">
+                            <img src="https://gaming-age.com/wp-content/uploads/2025/12/Resident_Evil_Requiem_15.jpg" alt="RE9 Screenshot 6" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-red-600/20 opacity-0 hover:opacity-100 transition-opacity"></div>
+                        </div>
+                        <div class="gallery-item relative overflow-hidden rounded-lg flex-shrink-0 w-64 h-48">
+                            <img src="https://gaming-age.com/wp-content/uploads/2025/12/Resident_Evil_Requiem_14.jpg" alt="RE9 Screenshot 7" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-red-600/20 opacity-0 hover:opacity-100 transition-opacity"></div>
+                        </div>
+                        <div class="gallery-item relative overflow-hidden rounded-lg flex-shrink-0 w-64 h-48">
+                            <img src="https://gaming-age.com/wp-content/uploads/2025/12/Resident_Evil_Requiem_13.jpg" alt="RE9 Screenshot 8" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-red-600/20 opacity-0 hover:opacity-100 transition-opacity"></div>
+                        </div>
+                    </div>
+                    <!-- Duplicated for seamless loop -->
+                    <div class="flex space-x-4 animate-marquee-right">
+                        <div class="gallery-item relative overflow-hidden rounded-lg flex-shrink-0 w-64 h-48">
+                            <img src="https://gaming-age.com/wp-content/uploads/2025/12/Resident_Evil_Requiem_16.jpg" alt="RE9 Screenshot 5" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-red-600/20 opacity-0 hover:opacity-100 transition-opacity"></div>
+                        </div>
+                        <div class="gallery-item relative overflow-hidden rounded-lg flex-shrink-0 w-64 h-48">
+                            <img src="https://gaming-age.com/wp-content/uploads/2025/12/Resident_Evil_Requiem_15.jpg" alt="RE9 Screenshot 6" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-red-600/20 opacity-0 hover:opacity-100 transition-opacity"></div>
+                        </div>
+                        <div class="gallery-item relative overflow-hidden rounded-lg flex-shrink-0 w-64 h-48">
+                            <img src="https://gaming-age.com/wp-content/uploads/2025/12/Resident_Evil_Requiem_14.jpg" alt="RE9 Screenshot 7" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-red-600/20 opacity-0 hover:opacity-100 transition-opacity"></div>
+                        </div>
+                        <div class="gallery-item relative overflow-hidden rounded-lg flex-shrink-0 w-64 h-48">
+                            <img src="https://gaming-age.com/wp-content/uploads/2025/12/Resident_Evil_Requiem_13.jpg" alt="RE9 Screenshot 8" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-red-600/20 opacity-0 hover:opacity-100 transition-opacity"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black border-t border-red-900/30 py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <div class="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center">
+                            <span class="text-white font-bold text-sm">RE</span>
+                        </div>
+                        <span class="text-xl font-bold text-red-600" style="font-family: 'Bebas Neue', cursive;">RESIDENT EVIL REQUIEM</span>
+                    </div>
+                    <p class="text-gray-400">La nueva era del terror survival celebra su 30° aniversario.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-4 text-red-600">Juego</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-red-500 transition-colors">Características</a></li>
+                        <li><a href="#" class="hover:text-red-500 transition-colors">Personajes</a></li>
+                        <li><a href="#" class="hover:text-red-500 transition-colors">Enemigos</a></li>
+                        <li><a href="#" class="hover:text-red-500 transition-colors">Armas</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-4 text-red-600">Comunidad</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-red-500 transition-colors">Foros</a></li>
+                        <li><a href="#" class="hover:text-red-500 transition-colors">Discord</a></li>
+                        <li><a href="#" class="hover:text-red-500 transition-colors">Reddit</a></li>
+                        <li><a href="#" class="hover:text-red-500 transition-colors">YouTube</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-4 text-red-600">Síguenos</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-red-500 transition-colors text-2xl">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-red-500 transition-colors text-2xl">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-red-500 transition-colors text-2xl">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-red-500 transition-colors text-2xl">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2026 Resident Evil Requiem. Todos los derechos reservados. | Capcom</p>
+            </div>
+        </div>
+    </footer>
+<!-- <script src="./script.js" defer></script> -->
+</body>
+</html>
+
+

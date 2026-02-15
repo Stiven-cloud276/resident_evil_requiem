@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:,">
+    <title>Información Detallada - Resident Evil Requiem</title>
+    <script>
+        document.documentElement.classList.add('js');
+    </script>
+    
+    <!-- Preload crítico para FOUC -->
+    <link rel="preload" href="./styles.css" as="style">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@300;400;700;900&display=swap" as="style">
+    
+    <!-- Carga síncrona de estilos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./styles.css">
+    <script src="./script.js" defer></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        (function fallbackTailwind() {
+            if (window.tailwind) return;
+            const alt = document.createElement('script');
+            alt.src = 'https://unpkg.com/@tailwindcss/browser@4';
+            alt.setAttribute('data-fallback-tailwind', 'true');
+            document.head.appendChild(alt);
+        })();
+    </script>
+
+    <!-- Script robusto para mostrar contenido -->
+    <script>
+        (function() {
+            const revealBody = function() {
+                if (document.body) {
+                    document.body.classList.add('loaded');
+                }
+            };
+
+            document.addEventListener('DOMContentLoaded', function() {
+                requestAnimationFrame(revealBody);
+            });
+
+            window.addEventListener('load', function() {
+                revealBody();
+            }, { once: true });
+
+            setTimeout(function() {
+                revealBody();
+            }, 1500);
+
+            window.addEventListener('error', function() {
+                revealBody();
+            });
+            window.addEventListener('unhandledrejection', function() {
+                revealBody();
+            });
+        })();
+    </script>
+    <style>
+        body {
+            background: #000;
+            color: #fff;
+            opacity: 1;
+            transition: opacity 0.3s ease-in;
+        }
+        .js body {
+            opacity: 0;
+        }
+        .js body.loaded {
+            opacity: 1;
+        }
+    </style>
+    <script>
+        window.addEventListener('load', function() {
+            if (typeof initApp === 'function') {
+                initApp();
+            }
+        });
+    </script>
+</head>
+<body class="bg-black text-white overflow-x-hidden">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 bg-black/90 backdrop-blur-md border-b border-red-900/30">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <div class="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center">
+                        <span class="text-white font-bold text-xl">RE</span>
+                    </div>
+                    <span class="text-2xl font-bold text-red-600" style="font-family: 'Bebas Neue', cursive;">RESIDENT EVIL REQUIEM</span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="index.html" class="hover:text-red-500 transition-colors">Inicio</a>
+                    <a href="index.html#detalles" class="hover:text-red-500 transition-colors">Detalles</a>
+                    <a href="index.html#trailer" class="hover:text-red-500 transition-colors">Trailer</a>
+                    <a href="index.html#sagas" class="hover:text-red-500 transition-colors">Sagas</a>
+                    <a href="index.html#galeria" class="hover:text-red-500 transition-colors">Galería</a>
+                </div>
+                <button id="mobile-menu-btn" class="md:hidden text-white">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-black/95 backdrop-blur-md">
+            <div class="px-4 py-3 space-y-3">
+                <a href="index.html" class="block hover:text-red-500 transition-colors">Inicio</a>
+                <a href="index.html#detalles" class="block hover:text-red-500 transition-colors">Detalles</a>
+                <a href="index.html#trailer" class="block hover:text-red-500 transition-colors">Trailer</a>
+                <a href="index.html#sagas" class="block hover:text-red-500 transition-colors">Sagas</a>
+                <a href="index.html#galeria" class="block hover:text-red-500 transition-colors">Galería</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="min-h-screen relative flex items-center justify-center pt-20">
+        <div class="absolute inset-0 bg-gradient-to-b from-black/50 via-black/70 to-black"></div>
+        <div class="absolute inset-0">
+            <img src="https://gaming-age.com/wp-content/uploads/2025/12/Resident_Evil_Requiem_3.jpg" alt="Resident Evil Requiem Background" class="w-full h-full object-cover opacity-40">
+        </div>
+        <div class="relative z-10 text-center px-4 max-w-5xl mx-auto">
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 text-red-600" style="font-family: 'Bebas Neue', cursive; text-shadow: 0 0 30px rgba(220, 38, 38, 0.8);">
+                INFORMACIÓN DETALLADA
+            </h1>
+            <p class="text-xl md:text-2xl mb-8 text-gray-300">Todo sobre Resident Evil Requiem - 27 de Febrero 2026</p>
+            <a href="index.html" class="inline-block bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-lg font-bold text-lg transition-all transform hover:scale-105 shadow-lg">
+                <i class="fas fa-arrow-left mr-2"></i> Volver al Inicio
+            </a>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="py-20 bg-black">
+        <div class="container mx-auto px-4 max-w-6xl">
+            <!-- Overview Section -->
+            <div class="mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-8 text-red-600" style="font-family: 'Bebas Neue', cursive;">
+                    Sinopsis Oficial de Resident Evil Requiem
+                </h2>
+                <div class="bg-gray-900 rounded-lg p-8 border border-red-900/30">
+                    <p class="text-lg leading-relaxed text-gray-300 mb-6">
+                        Resident Evil Requiem es la novena entrega principal de la franquicia, ambientada 30 años después de la destrucción de Raccoon City. La historia sigue a dos protagonistas: Grace Ashcroft, una analista de inteligencia del FBI enviada a investigar muertes extrañas en el hotel Wrenwood de Raccoon City, y Leon S. Kennedy, un agente de la DSO investigando incidentes relacionados con el antiguo científico de Umbrella, Victor Gideon.
+                    </p>
+                    <p class="text-lg leading-relaxed text-gray-300 mb-6">
+                        El juego alterna entre ambos personajes de manera similar a Resident Evil: Revelations. Las secciones de Grace se centran en el survival horror con recursos limitados, donde debe evadir a un monstruo que la persigue constantemente. Por otro lado, las secciones de Leon ofrecen más acción y combate contra enemigos zombis.
+                    </p>
+                    <p class="text-lg leading-relaxed text-gray-300">
+                        Anunciado oficialmente en el Summer Game Fest 2025 con fecha de lanzamiento para el 27 de febrero de 2026, Resident Evil Requiem celebra el 30° aniversario de la franquicia con el motor RE Engine evolucionado, gráficos de realismo cinematográfico y la capacidad de cambiar entre primera y tercera persona en cualquier momento.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Technical Specifications -->
+            <div class="mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-8 text-red-600" style="font-family: 'Bebas Neue', cursive;">
+                    Especificaciones Técnicas Oficiales
+                </h2>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-gray-900 rounded-lg p-6 border border-red-900/30">
+                        <h3 class="text-2xl font-bold mb-4 text-red-500">RE Engine 9.0</h3>
+                        <ul class="space-y-2 text-gray-300">
+                            <li><i class="fas fa-check text-red-500 mr-2"></i>Path Traced Lighting completo</li>
+                            <li><i class="fas fa-check text-red-500 mr-2"></i>Ray Tracing: Global Illumination</li>
+                            <li><i class="fas fa-check text-red-500 mr-2"></i>Ray Tracing: Reflections & Shadows</li>
+                            <li><i class="fas fa-check text-red-500 mr-2"></i>4K nativo a 60fps</li>
+                            <li><i class="fas fa-check text-red-500 mr-2"></i>Realismo cinematográfico</li>
+                        </ul>
+                    </div>
+                    <div class="bg-gray-900 rounded-lg p-6 border border-red-900/30">
+                        <h3 class="text-2xl font-bold mb-4 text-red-500">Plataformas Oficiales</h3>
+                        <ul class="space-y-2 text-gray-300">
+                            <li><i class="fas fa-gamepad text-red-500 mr-2"></i>PlayStation 5</li>
+                            <li><i class="fas fa-gamepad text-red-500 mr-2"></i>Xbox Series X/S</li>
+                            <li><i class="fas fa-desktop text-red-500 mr-2"></i>PC (Steam, Epic Games)</li>
+                            <li><i class="fas fa-gamepad text-red-500 mr-2"></i>Nintendo Switch 2</li>
+                            <li><i class="fas fa-cloud text-red-500 mr-2"></i>Cloud Gaming</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gameplay Features -->
+            <div class="mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-8 text-red-600" style="font-family: 'Bebas Neue', cursive;">
+                    Características del Gameplay Oficial
+                </h2>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="bg-gray-900 rounded-lg p-6 border border-red-900/30 hover:border-red-600/50 transition-all">
+                        <div class="text-red-600 text-3xl mb-4">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Doble Protagonista</h3>
+                        <p class="text-gray-400">Alterna entre Grace Ashcroft (survival horror) y Leon S. Kennedy (acción) con mecánicas diferentes.</p>
+                    </div>
+                    <div class="bg-gray-900 rounded-lg p-6 border border-red-900/30 hover:border-red-600/50 transition-all">
+                        <div class="text-red-600 text-3xl mb-4">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Perspectivas Flexibles</h3>
+                        <p class="text-gray-400">Cambia entre primera y tercera persona. Grace usa primera persona por defecto, Leon usa tercera.</p>
+                    </div>
+                    <div class="bg-gray-900 rounded-lg p-6 border border-red-900/30 hover:border-red-600/50 transition-all">
+                        <div class="text-red-600 text-3xl mb-4">
+                            <i class="fas fa-cogs"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Monstruo Perseguidor</h3>
+                        <p class="text-gray-400">Grace es perseguida por un monstruo que puede atravesar paredes y techos, similar a Mr. X y Lady Dimitrescu.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Story Details -->
+            <div class="mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-8 text-red-600" style="font-family: 'Bebas Neue', cursive;">
+                    Personajes y Trama Oficial
+                </h2>
+                <div class="bg-gray-900 rounded-lg p-8 border border-red-900/30">
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="text-2xl font-bold mb-4 text-red-500">Personajes Principales</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <h4 class="font-bold text-lg">Grace Ashcroft</h4>
+                                    <p class="text-gray-400">Analista de inteligencia del FBI, descrita como una "ratona de biblioteca introvertida" que se siente impotente al no ser experta en combate.</p>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-lg">Leon S. Kennedy</h4>
+                                    <p class="text-gray-400">Agente veterano de la DSO, caracterizado como un "ikeoji" (hombre atractivo mayor) en su versión más madura.</p>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-lg">Victor Gideon</h4>
+                                    <p class="text-gray-400">Antiguo científico de Umbrella responsable de los incidentes bioterroristas en el Midwest.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold mb-4 text-red-500">Nuevos Enemigos</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <h4 class="font-bold text-lg">Monstruo Perseguidor</h4>
+                                    <p class="text-gray-400">Enemigo que acecha a Grace, puede atravesar paredes y techos, detecta ruidos y luz.</p>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-lg">Zombis Evolutionados</h4>
+                                    <p class="text-gray-400">Enemigos clásicos mejorados que Leon enfrenta en sus secciones de acción.</p>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-lg">Bioterroristas</h4>
+                                    <p class="text-gray-400">Humanos infectados por los experimentos de Victor Gideon en el Midwest.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Development Information -->
+            <div class="mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-8 text-red-600" style="font-family: 'Bebas Neue', cursive;">
+                    Información de Desarrollo Oficial
+                </h2>
+                <div class="bg-gray-900 rounded-lg p-8 border border-red-900/30">
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="text-2xl font-bold mb-4 text-red-500">Equipo de Desarrollo</h3>
+                            <ul class="space-y-2 text-gray-300">
+                                <li><strong>Director:</strong> Koshi Nakanishi</li>
+                                <li><strong>Productor:</strong> Masato Kumazawa</li>
+                                <li><strong>Guionista:</strong> Yasuhiro Ampai</li>
+                                <li><strong>Director de Arte:</strong> Tomonori Takano</li>
+                                <li><strong>Compositor:</strong> Satoshi Hori</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold mb-4 text-red-500">Datos de Producción</h3>
+                            <ul class="space-y-2 text-gray-300">
+                                <li><strong>Tiempo de Desarrollo:</strong> 6 años</li>
+                                <li><strong>Anunciado:</strong> Summer Game Fest 2025</li>
+                                <li><strong>Fecha de Lanzamiento:</strong> 27 de febrero 2026</li>
+                                <li><strong>Equipo:</strong> 800+ desarrolladores</li>
+                                <li><strong>Motor:</strong> RE Engine evolucionado</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Requirements -->
+            <div class="mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-8 text-red-600" style="font-family: 'Bebas Neue', cursive;">
+                    Requisitos del Sistema (PC) - Estimados
+                </h2>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-gray-900 rounded-lg p-6 border border-red-900/30">
+                        <h3 class="text-2xl font-bold mb-4 text-red-500">Mínimos</h3>
+                        <ul class="space-y-2 text-gray-300">
+                            <li><strong>SO:</strong> Windows 10 64-bit</li>
+                            <li><strong>Procesador:</strong> Intel Core i5-8400 / AMD Ryzen 5 2600</li>
+                            <li><strong>Memoria:</strong> 16 GB RAM</li>
+                            <li><strong>Gráficos:</strong> RTX 2070 8GB / RX 6700 XT 12GB</li>
+                            <li><strong>DirectX:</strong> Versión 12 Ultimate</li>
+                            <li><strong>Almacenamiento:</strong> 85 GB SSD</li>
+                        </ul>
+                    </div>
+                    <div class="bg-gray-900 rounded-lg p-6 border border-red-900/30">
+                        <h3 class="text-2xl font-bold mb-4 text-red-500">Recomendados</h3>
+                        <ul class="space-y-2 text-gray-300">
+                            <li><strong>SO:</strong> Windows 11 64-bit</li>
+                            <li><strong>Procesador:</strong> Intel Core i7-10700K / AMD Ryzen 7 3700X</li>
+                            <li><strong>Memoria:</strong> 32 GB RAM</li>
+                            <li><strong>Gráficos:</strong> RTX 4070 Ti / RX 7800 XT</li>
+                            <li><strong>DirectX:</strong> Versión 12 Ultimate</li>
+                            <li><strong>Almacenamiento:</strong> 85 GB SSD NVMe</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Editions -->
+            <div class="mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-8 text-red-600" style="font-family: 'Bebas Neue', cursive;">
+                    Ediciones Oficiales
+                </h2>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="bg-gray-900 rounded-lg p-6 border border-red-900/30">
+                        <h3 class="text-2xl font-bold mb-4 text-red-500">Estándar</h3>
+                        <p class="text-3xl font-bold mb-4">S/. 269.99</p>
+                        <ul class="space-y-2 text-gray-300">
+                            <li><i class="fas fa-check text-green-500 mr-2"></i>Juego base</li>
+                            <li><i class="fas fa-check text-green-500 mr-2"></i>Digital Artbook</li>
+                            <li><i class="fas fa-check text-green-500 mr-2"></i>Banda sonora digital</li>
+                        </ul>
+                    </div>
+                    <div class="bg-gray-900 rounded-lg p-6 border border-red-600/50">
+                        <h3 class="text-2xl font-bold mb-4 text-red-500">Deluxe</h3>
+                        <p class="text-3xl font-bold mb-4">S/. 349.99</p>
+                        <ul class="space-y-2 text-gray-300">
+                            <li><i class="fas fa-check text-green-500 mr-2"></i>Todo lo estándar</li>
+                            <li><i class="fas fa-check text-green-500 mr-2"></i>Season Pass</li>
+                            <li><i class="fas fa-check text-green-500 mr-2"></i>3 packs de contenido</li>
+                            <li><i class="fas fa-check text-green-500 mr-2"></i>Skins exclusivas</li>
+                        </ul>
+                    </div>
+                    <div class="bg-gray-900 rounded-lg p-6 border border-red-900/30">
+                        <h3 class="text-2xl font-bold mb-4 text-red-500">Coleccionista</h3>
+                        <p class="text-3xl font-bold mb-4">S/. 769.99</p>
+                        <ul class="space-y-2 text-gray-300">
+                            <li><i class="fas fa-check text-green-500 mr-2"></i>Todo lo deluxe</li>
+                            <li><i class="fas fa-check text-green-500 mr-2"></i>Estatua de Grace & Leon 30cm</li>
+                            <li><i class="fas fa-check text-green-500 mr-2"></i>Steelbook exclusivo</li>
+                            <li><i class="fas fa-check text-green-500 mr-2"></i>Mapa de Raccoon City</li>
+                            <li><i class="fas fa-check text-green-500 mr-2"></i>amiibo figures 2026</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Release Information -->
+            <div class="text-center bg-gray-900 rounded-lg p-8 border border-red-900/30">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4 text-red-600" style="font-family: 'Bebas Neue', cursive;">
+                    Fecha de Lanzamiento Oficial
+                </h2>
+                <p class="text-3xl font-bold mb-4">27 de Febrero de 2026</p>
+                <p class="text-xl text-gray-300">30° Aniversario de la Franquicia Resident Evil</p>
+                <div class="mt-6 flex justify-center space-x-4">
+                    <button class="bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-lg font-bold text-lg transition-all transform hover:scale-105">
+                        <i class="fab fa-steam mr-2"></i> Steam
+                    </button>
+                    <button class="bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-lg font-bold text-lg transition-all transform hover:scale-105">
+                        <i class="fab fa-playstation mr-2"></i> PlayStation
+                    </button>
+                    <button class="bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-lg font-bold text-lg transition-all transform hover:scale-105">
+                        <i class="fab fa-xbox mr-2"></i> Xbox
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black border-t border-red-900/30 py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <div class="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center">
+                            <span class="text-white font-bold text-sm">RE</span>
+                        </div>
+                        <span class="text-xl font-bold text-red-600" style="font-family: 'Bebas Neue', cursive;">RESIDENT EVIL REQUIEM</span>
+                    </div>
+                    <p class="text-gray-400">Celebrando 30 años de terror survival.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-4 text-red-600">Juego</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-red-500 transition-colors">Características</a></li>
+                        <li><a href="#" class="hover:text-red-500 transition-colors">Personajes</a></li>
+                        <li><a href="#" class="hover:text-red-500 transition-colors">Enemigos</a></li>
+                        <li><a href="#" class="hover:text-red-500 transition-colors">Armas</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-4 text-red-600">Comunidad</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-red-500 transition-colors">Foros</a></li>
+                        <li><a href="#" class="hover:text-red-500 transition-colors">Discord</a></li>
+                        <li><a href="#" class="hover:text-red-500 transition-colors">Reddit</a></li>
+                        <li><a href="#" class="hover:text-red-500 transition-colors">YouTube</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-4 text-red-600">Síguenos</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-red-500 transition-colors text-2xl">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-red-500 transition-colors text-2xl">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-red-500 transition-colors text-2xl">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-red-500 transition-colors text-2xl">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2026 Resident Evil Requiem. Todos los derechos reservados. | Capcom</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- <script src="./script.js" defer></script> -->
+</body>
+</html>
+
