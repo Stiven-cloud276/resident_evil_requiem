@@ -63,25 +63,39 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Video autoplay management for better performance
-    const videos = document.querySelectorAll('video[autoplay]');
-    
-    // Intersection Observer for video autoplay
-    const videoObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.play().catch(e => console.log('Autoplay prevented:', e));
-            } else {
-                entry.target.pause();
-            }
-        });
-    }, {
-        threshold: 0.5
-    });
+    // Load and play saga videos only when visible to reduce startup cost
+    const sagaVideos = document.querySelectorAll('#sagas video');
 
-    videos.forEach(video => {
-        videoObserver.observe(video);
-    });
+    if ('IntersectionObserver' in window) {
+        const sagaVideoObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                const video = entry.target;
+                if (entry.isIntersecting) {
+                    if (!video.dataset.loaded) {
+                        video.load();
+                        video.dataset.loaded = 'true';
+                    }
+                    video.play().catch(() => {
+                        // Some mobile browsers can still block autoplay.
+                    });
+                } else {
+                    video.pause();
+                }
+            });
+        }, {
+            threshold: 0.2,
+            rootMargin: '120px 0px'
+        });
+
+        sagaVideos.forEach(video => {
+            sagaVideoObserver.observe(video);
+        });
+    } else {
+        // Fallback for older browsers without IntersectionObserver
+        sagaVideos.forEach(video => {
+            video.setAttribute('preload', 'metadata');
+        });
+    }
 
     // Particle effect on mouse movement
     let particleCount = 0;
@@ -331,7 +345,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Track video plays
-    videos.forEach(video => {
+    sagaVideos.forEach(video => {
         video.addEventListener('play', function() {
             trackEvent('Video Play', 'Media Interaction');
         });
