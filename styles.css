@@ -1,5 +1,51 @@
 /* Estilos personalizados para Resident Evil 9 */
 
+/* Base typography */
+:root {
+    --font-body: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --font-title: 'Bebas Neue', cursive;
+}
+
+body {
+    font-family: var(--font-body);
+    font-weight: 400;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+h1, h2, .brand-title {
+    font-family: var(--font-title);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+h3, h4, nav a {
+    font-family: var(--font-body);
+}
+
+h3 {
+    font-weight: 700;
+}
+
+h4 {
+    font-weight: 600;
+}
+
+nav a {
+    font-weight: 500;
+    letter-spacing: 0.2px;
+}
+
+p, li {
+    font-weight: 400;
+}
+
+button, input, select, textarea {
+    font: inherit;
+}
+
 /* Animaciones personalizadas */
 @keyframes glow {
     0% { text-shadow: 0 0 10px rgba(220, 38, 38, 0.8); }
@@ -696,4 +742,55 @@ body {
 
 @media (min-width: 1024px) {
   .lg\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+/* Release platforms responsive layout */
+.release-platforms {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.75rem;
+    align-items: stretch;
+}
+
+.release-platform-btn {
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    min-height: 46px;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    font-size: 1rem;
+    line-height: 1.1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@media (max-width: 768px) {
+    .release-platforms {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.5rem;
+    }
+
+    .release-platform-btn {
+        width: 100%;
+        min-width: 0;
+        max-width: none;
+        font-size: 0.78rem;
+        gap: 0.25rem;
+        padding-left: 0.35rem;
+        padding-right: 0.35rem;
+        overflow: visible;
+        text-overflow: clip;
+    }
+
+    .release-platform-btn:last-child {
+        grid-column: 1 / -1;
+        width: calc(50% - 0.25rem);
+        min-width: 0;
+        max-width: none;
+        justify-self: center;
+    }
 }
