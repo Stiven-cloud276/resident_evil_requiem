@@ -332,24 +332,49 @@ document.addEventListener('DOMContentLoaded', function() {
             let lastTapTime = 0;
             let lastTapSide = null;
             let mobileControlsTimer = null;
+            const MOBILE_CONTROLS_PLAYING_MS = 4500;
+            const MOBILE_CONTROLS_TAP_MS = 4800;
+            const MOBILE_CONTROLS_PAUSED_MS = 5200;
 
             function showMobileControlsTemporarily(durationMs = 1200) {
+                // On mobile, force native controls visible only for a short window.
+                mainVideo.controls = true;
                 mainVideo.classList.add('mobile-controls-visible');
                 if (mobileControlsTimer) {
                     clearTimeout(mobileControlsTimer);
                 }
                 mobileControlsTimer = setTimeout(() => {
-                    mainVideo.classList.remove('mobile-controls-visible');
+                    if (!mainVideo.paused) {
+                        mainVideo.controls = false;
+                        mainVideo.classList.remove('mobile-controls-visible');
+                    }
+                }, durationMs);
+            }
+
+            function hideMobileControlsSoon(durationMs = 900) {
+                if (mobileControlsTimer) {
+                    clearTimeout(mobileControlsTimer);
+                }
+                mobileControlsTimer = setTimeout(() => {
+                    if (!mainVideo.paused) {
+                        mainVideo.controls = false;
+                        mainVideo.classList.remove('mobile-controls-visible');
+                    }
                 }, durationMs);
             }
 
             // Show briefly on play, then hide automatically
             mainVideo.addEventListener('play', function() {
-                showMobileControlsTemporarily(900);
+                showMobileControlsTemporarily(MOBILE_CONTROLS_PLAYING_MS);
+                hideMobileControlsSoon(MOBILE_CONTROLS_PLAYING_MS);
+            });
+            mainVideo.addEventListener('playing', function() {
+                hideMobileControlsSoon(MOBILE_CONTROLS_PLAYING_MS);
             });
             // Keep visible a bit longer when paused
             mainVideo.addEventListener('pause', function() {
-                showMobileControlsTemporarily(1800);
+                mainVideo.controls = true;
+                showMobileControlsTemporarily(MOBILE_CONTROLS_PAUSED_MS);
             });
 
             mainVideo.addEventListener('touchend', function(e) {
@@ -376,7 +401,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (isDoubleTap) {
                     const delta = side === 'right' ? 5 : -5;
                     seekMainVideo(delta);
-                    showMobileControlsTemporarily(700);
+                    showMobileControlsTemporarily(MOBILE_CONTROLS_PLAYING_MS);
                     lastTapTime = 0;
                     lastTapSide = null;
                     return;
@@ -385,8 +410,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 lastTapTime = now;
                 lastTapSide = side;
                 // Single tap: show controls smoothly and auto-hide.
-                showMobileControlsTemporarily(1500);
+                showMobileControlsTemporarily(MOBILE_CONTROLS_TAP_MS);
+                hideMobileControlsSoon(MOBILE_CONTROLS_TAP_MS);
             }, { passive: false });
+
+            // Start hidden while playing on mobile.
+            if (!mainVideo.paused) {
+                mainVideo.controls = false;
+            }
         }
         
         // Funcionalidad del botón de trailer

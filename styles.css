@@ -411,13 +411,16 @@ body {
 @media (hover: none) and (pointer: coarse) {
     #main-video::-webkit-media-controls-panel,
     #main-video::-webkit-media-controls {
-        opacity: 0;
-        transition: opacity 0.22s ease;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        transition: opacity 0.45s cubic-bezier(0.22, 0.61, 0.36, 1), visibility 0s linear 0.45s;
     }
 
     #main-video.mobile-controls-visible::-webkit-media-controls-panel,
     #main-video.mobile-controls-visible::-webkit-media-controls {
-        opacity: 1;
+        opacity: 1 !important;
+        visibility: visible !important;
+        transition: opacity 0.3s cubic-bezier(0.22, 0.61, 0.36, 1), visibility 0s linear 0s;
     }
 }
 
