@@ -46,6 +46,35 @@ button, input, select, textarea {
     font: inherit;
 }
 
+/* Hero alignment fixes (desktop + mobile) */
+.hero-main-title {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    max-width: 24ch;
+    font-size: clamp(2.5rem, 9vw, 6.2rem);
+    line-height: 0.95;
+    white-space: normal;
+    text-indent: 0;
+}
+
+.hero-scroll-indicator {
+    left: 50%;
+    transform: translateX(-50%);
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    animation: heroArrowBounce 1.7s infinite;
+}
+
+@keyframes heroArrowBounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(-6px); }
+}
+
 /* Animaciones personalizadas */
 @keyframes glow {
     0% { text-shadow: 0 0 10px rgba(220, 38, 38, 0.8); }
@@ -272,6 +301,18 @@ html {
 
 /* Mobile optimizations */
 @media (max-width: 768px) {
+    .hero-main-title {
+        max-width: 14ch;
+        font-size: clamp(2rem, 12vw, 4rem);
+        line-height: 0.95;
+        white-space: normal;
+        text-indent: 0;
+    }
+
+    .hero-scroll-indicator {
+        bottom: 1rem;
+    }
+
     .hero-title {
         font-size: 3rem;
     }
@@ -354,7 +395,7 @@ body {
     outline-offset: 2px;
 }
 
-/* Desktop behavior: controls only visible on hover/focus */
+/* Desktop behavior: controls panel visible on hover/focus */
 @media (hover: hover) and (pointer: fine) {
     #main-video::-webkit-media-controls-panel {
         opacity: 0;
@@ -366,6 +407,20 @@ body {
         opacity: 1;
     }
 }
+
+@media (hover: none) and (pointer: coarse) {
+    #main-video::-webkit-media-controls-panel,
+    #main-video::-webkit-media-controls {
+        opacity: 0;
+        transition: opacity 0.22s ease;
+    }
+
+    #main-video.mobile-controls-visible::-webkit-media-controls-panel,
+    #main-video.mobile-controls-visible::-webkit-media-controls {
+        opacity: 1;
+    }
+}
+
 
 .video-seek-indicator {
     position: absolute;
@@ -383,7 +438,7 @@ body {
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.16s ease;
-    z-index: 20;
+    z-index: 30;
 }
 
 .video-seek-indicator.show {
@@ -403,36 +458,7 @@ body {
 }
 
 .main-video-mobile-toggle {
-    display: none;
-}
-
-@media (hover: none) and (pointer: coarse) {
-    #main-video::-webkit-media-controls {
-        display: none !important;
-    }
-
-    .main-video-mobile-toggle {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 64px;
-        height: 64px;
-        border: 1px solid rgba(255, 255, 255, 0.28);
-        border-radius: 9999px;
-        background: rgba(0, 0, 0, 0.45);
-        color: #fff;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.4rem;
-        z-index: 22;
-    }
-
-    .main-video-mobile-toggle.hidden {
-        opacity: 0;
-        pointer-events: none;
-    }
+    display: none !important;
 }
 
 /* Custom video overlay for controls */

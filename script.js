@@ -140,6 +140,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Video trailer restart functionality
     const mainVideo = document.getElementById('main-video');
+    const mainVideoWrapper = document.getElementById('main-video-wrapper');
     const trailerBtn = document.getElementById('play-trailer-btn');
     const mainVideoSeekIndicator = document.getElementById('main-video-seek-indicator');
     const mainVideoMobileToggle = document.getElementById('main-video-mobile-toggle');
@@ -158,7 +159,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
             const now = Date.now();
             const direction = seconds > 0 ? 'forward' : 'backward';
-            const absSeconds = Math.abs(seconds);
+            const absSeconds = Math.trunc(Math.abs(seconds));
+            if (absSeconds <= 0) return;
             const isBurst = lastSeekDirection === direction && (now - lastSeekAt) < 800;
             seekAccumulated = isBurst ? (seekAccumulated + absSeconds) : absSeconds;
             lastSeekDirection = direction;
@@ -166,10 +168,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
             mainVideoSeekIndicator.classList.remove('forward', 'backward');
             mainVideoSeekIndicator.classList.add(direction);
-            const shown = Number.isInteger(seekAccumulated) ? seekAccumulated : Number(seekAccumulated.toFixed(1));
             mainVideoSeekIndicator.textContent = direction === 'forward'
-                ? `+ ${shown} >>`
-                : `<< ${shown} -`;
+                ? `+ ${seekAccumulated} >>`
+                : `<< ${seekAccumulated} -`;
             mainVideoSeekIndicator.classList.add('show');
 
             if (seekIndicatorTimer) {
@@ -203,7 +204,11 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             mainVideo.currentTime = next;
-            showSeekIndicator(applied);
+            const appliedSign = applied > 0 ? 1 : -1;
+            const appliedWholeSeconds = Math.trunc(Math.abs(applied));
+            if (appliedWholeSeconds > 0) {
+                showSeekIndicator(appliedWholeSeconds * appliedSign);
+            }
             return true;
         }
 
@@ -249,11 +254,9 @@ document.addEventListener('DOMContentLoaded', function() {
             this.style.cursor = 'default';
         });
 
-        const isCoarsePointer = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
-        if (isCoarsePointer) {
-            // Mobile: only center icon should control play/pause.
-            mainVideo.controls = false;
-        }
+        const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+        // Keep native controls enabled across devices.
+        mainVideo.controls = true;
 
         function updateMobileToggleIcon() {
             if (!mainVideoMobileToggle) return;
@@ -322,39 +325,69 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        // Mobile behavior:
-        // - double tap left/right seeks -/+10 seconds
-        // - play/pause is handled only by center icon button
-        let lastTapTime = 0;
-        let lastTapSide = null;
+        // Mobile:
+        // - single tap shows controls smoothly for a short time
+        // - double tap left/right seeks with visual indicator
+        if (isTouchDevice) {
+            let lastTapTime = 0;
+            let lastTapSide = null;
+            let mobileControlsTimer = null;
 
-        mainVideo.addEventListener('touchend', function(e) {
-            if (!isCoarsePointer) {
-                return;
+            function showMobileControlsTemporarily(durationMs = 1200) {
+                mainVideo.classList.add('mobile-controls-visible');
+                if (mobileControlsTimer) {
+                    clearTimeout(mobileControlsTimer);
+                }
+                mobileControlsTimer = setTimeout(() => {
+                    mainVideo.classList.remove('mobile-controls-visible');
+                }, durationMs);
             }
 
-            if (!e.changedTouches || e.changedTouches.length === 0) {
-                return;
-            }
+            // Show briefly on play, then hide automatically
+            mainVideo.addEventListener('play', function() {
+                showMobileControlsTemporarily(900);
+            });
+            // Keep visible a bit longer when paused
+            mainVideo.addEventListener('pause', function() {
+                showMobileControlsTemporarily(1800);
+            });
 
-            const touch = e.changedTouches[0];
-            const rect = mainVideo.getBoundingClientRect();
-            const x = touch.clientX - rect.left;
-            const currentSide = x < rect.width / 2 ? 'left' : 'right';
-            const now = Date.now();
-            const isDoubleTap = (now - lastTapTime) < 300 && lastTapSide === currentSide;
+            mainVideo.addEventListener('touchend', function(e) {
+                if (!e.changedTouches || e.changedTouches.length === 0) {
+                    return;
+                }
 
-            if (isDoubleTap) {
-                const delta = currentSide === 'right' ? 10 : -10;
-                seekMainVideo(delta);
-                lastTapTime = 0;
-                lastTapSide = null;
-                return;
-            }
+                const touch = e.changedTouches[0];
+                const rect = mainVideo.getBoundingClientRect();
+                const tapX = touch.clientX - rect.left;
+                const tapY = touch.clientY - rect.top;
 
-            lastTapTime = now;
-            lastTapSide = currentSide;
-        }, { passive: true });
+                // Do not intercept touches over the bottom controls/timeline zone.
+                if (tapY > rect.height * 0.78) {
+                    lastTapTime = 0;
+                    lastTapSide = null;
+                    return;
+                }
+
+                const side = tapX >= rect.width / 2 ? 'right' : 'left';
+                const now = Date.now();
+                const isDoubleTap = (now - lastTapTime) < 300 && side === lastTapSide;
+
+                if (isDoubleTap) {
+                    const delta = side === 'right' ? 5 : -5;
+                    seekMainVideo(delta);
+                    showMobileControlsTemporarily(700);
+                    lastTapTime = 0;
+                    lastTapSide = null;
+                    return;
+                }
+
+                lastTapTime = now;
+                lastTapSide = side;
+                // Single tap: show controls smoothly and auto-hide.
+                showMobileControlsTemporarily(1500);
+            }, { passive: false });
+        }
         
         // Funcionalidad del botón de trailer
         if (trailerBtn) {

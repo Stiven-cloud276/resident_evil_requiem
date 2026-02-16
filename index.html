@@ -38,8 +38,8 @@
     <!-- Carga síncrona de estilos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@300;400;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./styles.css">
-    <script src="./script.js" defer></script>
+    <link rel="stylesheet" href="./styles.css?v=20260216-3">
+    <script src="./script.js?v=20260216-2" defer></script>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -132,7 +132,7 @@
             <img src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=1920&h=1080&fit=crop" alt="Resident Evil 9 Background" class="w-full h-full object-cover opacity-40">
         </div>
         <div class="relative z-10 text-center px-4 max-w-5xl mx-auto">
-            <h1 class="text-6xl md:text-8xl font-bold mb-6 text-red-600" style="font-family: 'Bebas Neue', cursive; text-shadow: 0 0 30px rgba(220, 38, 38, 0.8);">
+            <h1 class="hero-main-title font-bold mb-6 text-red-600" style="font-family: 'Bebas Neue', cursive; text-shadow: 0 0 30px rgba(220, 38, 38, 0.8);">
                 RESIDENT EVIL REQUIEM
             </h1>
             <p class="text-xl md:text-3xl mb-8 text-gray-300">Grace Ashcroft y Leon S. Kennedy: Una Nueva Era de Terror</p>
@@ -145,7 +145,7 @@
                 </a>
             </div>
         </div>
-        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+        <div class="hero-scroll-indicator absolute bottom-8 left-1/2">
             <i class="fas fa-chevron-down text-3xl text-red-600"></i>
         </div>
     </section>
@@ -157,7 +157,7 @@
                 Grace Ashcroft y Leon S. Kennedy están de Vuelta
             </h2>
             <div class="max-w-5xl mx-auto">
-                <div class="relative rounded-lg overflow-hidden shadow-2xl">
+                <div id="main-video-wrapper" class="relative rounded-lg overflow-hidden shadow-2xl">
                     <video id="main-video" class="w-full aspect-video" controls preload="metadata" playsinline controlsList="nodownload noremoteplayback" disablePictureInPicture oncontextmenu="return false;" tabindex="0" poster="images/resident-evil-requiem.jpg">
                         <source src="vidios-web/Resident%20Evil%20Requiem%20-%203rd%20Trailer.mp4" type="video/mp4">
                         Tu navegador no soporta el elemento de video.
